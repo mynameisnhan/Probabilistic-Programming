@@ -1,0 +1,19 @@
+// Amir Hassannejad (3070865)
+// Nhan Le (402196)
+// George Farah (421409)
+
+var Ruin = function(n, m, t)
+{
+  return (n==0) ? 2 :(m==0) ? 1 : (flip(0.5) ? Ruin(n+1,m-1, t+1) : Ruin(n-1,m+1, t+1))
+}
+
+//player 1 needs more then 11 coins
+var Ruin_wrapper = function(){return Ruin(11,10,0)}
+var d = Infer({method: 'enumerate', maxExecutions:1000},Ruin_wrapper)
+viz.auto(d)
+
+// 12 coins are enough to win with probability >70
+var Ruin_wrapper2= function(){return Ruin(12 ,10,0)}
+var e = Infer({method: 'enumerate', maxExecutions:1000},Ruin_wrapper2)
+viz.auto(e)
+

@@ -1,0 +1,49 @@
+// Amir Hassannejad (3070865)
+// Nhan Le (402196)
+// George Farah (421409)
+
+var model = function() {
+
+    // There are 3 doors.
+    var d1 = 1;
+    var d2 = 2;
+    var d3 = 3;
+    var doors = [d1,d2,d3];
+    
+    
+    // The prize can be behind any door 1..3.
+    var prize = uniformDraw(doors);
+    
+    
+    // We will always choose door 1
+    
+    var open = (function() {
+         if (prize == d1) {
+             return categorical({ps:[0,0.5,0.5],vs:doors})
+         } else if (prize == d2) {
+             return categorical({ps:[0,0,1],vs:doors})            
+         } else {
+             return categorical({ps:[0,1,0],vs:doors});
+         }
+    })();
+  
+    
+    //Host opens door 3.
+    condition(open == d3);
+    
+    // What are the probabilities that the price is behind
+    // - door d1 (don't switch)
+    // - or door d3 (switch door)
+    return {
+        prize:prize,
+         
+    };
+
+}
+
+var d = Infer(model);
+
+viz.auto(d)
+
+// If I don´t switch prob 1/3 of winning
+// If I swicth prob 2/3 of winning

@@ -1,0 +1,17 @@
+// Amir Hassannejad (3070865)
+// Nhan Le (402196)
+// George Farah (421409)
+
+var bayes = Infer({method: "enumerate"}, function() { 
+  var rain = flip(.2)
+  var sprinkler = rain ? flip(.01) : flip(.4);
+  var wetWhenRain = sprinkler ? flip(.99) : flip(.8);
+  var wetWhenNoRain = sprinkler ? flip(.9) : flip(0);
+  condition(wetWhenRain === true && wetWhenNoRain === true);
+  return rain;
+});
+
+//viz.table(Infer({method: "enumerate", 
+//                 model: bayes}))
+
+print('Probability of rain given wet grass = ' + Math.exp(bayes.score(true)));

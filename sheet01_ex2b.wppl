@@ -1,0 +1,15 @@
+// Amir Hassannejad (3070865)
+// Nhan Le (402196)
+// George Farah (421409)
+
+var Ruin2= function(n, m, t)
+{
+  return (n==0) ? t :(m==0) ? t : (flip(0.5) ? Ruin2(n+1,m-1, t+1) : Ruin2(n-1,m+1, t+1))
+}
+
+//still needs expected value calculation
+var Ruin2_wrapper = function(){return Ruin2(5,5,0)}
+var f = Infer({method: 'enumerate', maxExecutions:1000},Ruin2_wrapper)
+//Expectation(Bernoulli(0,5[f]))
+viz.auto(f)
+print((expectation(f)));
