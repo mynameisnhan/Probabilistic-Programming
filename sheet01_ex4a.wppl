@@ -1,0 +1,31 @@
+// select part of exercise here
+var exPart = ’a’
+
+var model = function() {
+  var x = gaussian(0, 1)
+  var v = uniform(1, 10)
+  var a = uniform(1,2)
+  var t_1 = 10
+  var h = 1
+  var steps = t_1 / h
+  
+  var dynamics = function(x, v, steps) {
+    if(steps == 0) {
+      return x
+    }
+    var x_new = x + h * v
+    var v_new = v + h * a
+    return dynamics(x_new, v_new, steps - 1)
+  }
+  
+  var x_t_1 = dynamics(x, v, steps)
+  
+  if(exPart == ’a’) {
+    return x_t_1
+  }
+  else if(exPart == ’b’) {
+    observe(Gaussian({mu: 150, sigma: 10}), x_t_1)
+    return v
+  }
+}
+viz.auto(Infer({method: ’MCMC’, samples: 100000, model}));
