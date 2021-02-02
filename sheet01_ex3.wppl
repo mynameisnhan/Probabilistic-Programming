@@ -2,16 +2,44 @@
 // Nhan Le (402196)
 // George Farah (421409)
 
-var bayes = Infer({method: "enumerate"}, function() { 
-  var rain = flip(.2)
-  var sprinkler = rain ? flip(.01) : flip(.4);
-  var wetWhenRain = sprinkler ? flip(.99) : flip(.8);
-  var wetWhenNoRain = sprinkler ? flip(.9) : flip(0);
-  condition(wetWhenRain === true && wetWhenNoRain === true);
-  return rain;
-});
+var rain = function() {
+  return flip(.2) ? 1 : 0
+}
 
-//viz.table(Infer({method: "enumerate", 
-//                 model: bayes}))
+var sprinkler = function (r) {
+  if(r) {
+    return flip(.01) ? 1 : 0
+  } 
+  else {
+    return flip(.4) ? 1 : 0
+  }
+}
 
-print('Probability of rain given wet grass = ' + Math.exp(bayes.score(true)));
+var grasswet = function (s, r) {
+  if(s==1 && r==1) {
+  return flip(.99) ? 1 : 0
+  }
+  else if(s==0 && r==1) {
+    return flip(.8) ? 1 : 0
+  }
+  else if(s==1 && r==0) {
+    return flip(.9) ? 1 : 0
+  }
+  else if(s==0 && r==0) {
+    return flip(0) ? 1 : 0
+  }
+}
+
+var bn = function() {
+  var r = rain();
+  var s = sprinkler(r);
+  var g = grasswet(s, r);
+  condition(g==1)
+  return r;
+}
+
+var options = {method: "enumerate", maxExecutions: 10000}
+var post = Infer(options, bn)
+viz.auto(post)
+print(post)
+// The probability of rain given the wet grass is approximately 35.77%.
